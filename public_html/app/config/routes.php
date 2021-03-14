@@ -8,11 +8,11 @@ return [
 
     'registration' => [
         'controller' => 'registration',
-        'action' => 'registration'
+        'action' => 'index'
     ],
 
     'admin' => [
         'controller' => 'admin',
-        'action' => 'admin'
+        'action' => 'index'
     ]
 ];

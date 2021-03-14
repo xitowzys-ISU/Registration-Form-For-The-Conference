@@ -6,15 +6,14 @@ use \Exception;
 
 class Router
 {
-
     protected $routes = [];
     protected $params = [];
 
     public function __construct()
     {
-        $arr = require 'app/config/routes.php';
+        $routes = require 'app/config/routes.php';
 
-        foreach ($arr as $key => $value) {
+        foreach ($routes as $key => $value) {
             $this->add($key, $value);
         }
     }
@@ -26,7 +25,6 @@ class Router
 
     public function coincidence()
     {
-        // debug($this->routes);
         $uri = trim($_SERVER['REQUEST_URI'], '/');
         foreach ($this->routes as $route => $params) {
             if (preg_match('#^' . $route . '$#', $uri, $matches)) {
@@ -40,22 +38,26 @@ class Router
 
     public function run()
     {
+        $view = new View();
+
         if ($this->coincidence()) {
             $path = 'app\controllers\\' . ucfirst($this->params['controller']) . 'Controller';
             if (class_exists($path)) {
                 $action = $this->params['action'] . 'Action';
                 if (method_exists($path, $action)) {
-                    $controller = new $path;
+                    $controller = new $path($this->params);
                     $controller->$action();
                 } else {
-                    throw new Exception('Action not found');
+                    $view->errorCode(404);
+                    // throw new Exception('Action not found');
                 }
             } else {
-                throw new Exception('Controller not found');
+                $view->errorCode(404);
+                // throw new Exception('Controller not found');
             }
         } else {
-            throw new Exception('Route not found');
-            echo 'Route not found';
+            $view->errorCode(404);
+            // throw new Exception('Route not found');
         }
     }
 }

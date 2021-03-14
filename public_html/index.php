@@ -3,9 +3,9 @@
 use app\core\Router;
 
 require 'app/lib/Dev.php';
+require 'app/config/config.php';
 
 spl_autoload_register(function ($class){
-    // include 'classes/' . $class . '.class.php';
     $path = str_replace('\\', '/', $class . '.php');
     if (file_exists($path))
     {
