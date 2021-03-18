@@ -10,11 +10,19 @@ class RegistrationController extends Controller
 
     public function indexAction()
     {
-        $this->data = [
-            '{TITLE}' => 'Регистрация на конференцию'
-        ];
+        $this->data['{TITLE}'] = 'Регистрация на конференцию';
 
         if (!empty($_POST)) {
+
+            foreach ($_POST as $key => $value) {
+
+                if ($key === 'thematics' || $key === 'payments') {
+                    $this->data['{POST_SELECT_' . strtoupper($key) . '[' . $value . ']}'] = "selected";
+                }
+
+                $this->data['{POST_' . strtoupper($key) . '}'] = htmlspecialchars($value);
+            }
+
             $this->registration();
         }
 
@@ -27,8 +35,7 @@ class RegistrationController extends Controller
         $errMsg = "";
 
         // Checking the first name
-        if(empty($_POST['firstName']))
-        {
+        if (empty($_POST['firstName'])) {
             $errMsg = 'Вы не ввели имя';
             $this->data['{ERROR_FIRST_NAME}'] = $this->model->templateErr('msg-err', $errMsg);
             $isErr = true;
@@ -42,7 +49,7 @@ class RegistrationController extends Controller
         // Checking the last name
         if (empty($_POST['lastName'])) {
             $errMsg = 'Вы не ввели фамилию';
-            $this->data['{ERROR_LAST_NAME}'] = $this->model->templateErr('msg-err', $errMsg);;
+            $this->data['{ERROR_LAST_NAME}'] = $this->model->templateErr('msg-err', $errMsg);
             $isErr = true;
         }
         if (!preg_match("/^[а-яА-ЯЁёa-zA-Z-' ]*$/u", $_POST['lastName'])) {
@@ -60,9 +67,9 @@ class RegistrationController extends Controller
 
         // Setting the checkbox value
         if (!isset($_POST['mailing'])) {
-            $_POST['mailing'] = 'Нет'; 
+            $_POST['mailing'] = 'Нет';
         } else {
-            $_POST['mailing'] = 'Да'; 
+            $_POST['mailing'] = 'Да';
         }
 
         if ($isErr)

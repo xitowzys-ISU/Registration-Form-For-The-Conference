@@ -6,5 +6,5 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{TITLE}</title>
 
-    <link rel="stylesheet" href="/app/views/default/styles/main.min.css">
+    <link rel="stylesheet" href="{TEMPLATE_SRC}css/main.min.css">
 </head>

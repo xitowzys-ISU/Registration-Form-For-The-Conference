@@ -23,14 +23,12 @@ class AdminController extends Controller
 
         foreach ($users as $key => $value) {
             $usersTable .= '<tr>';
+            
             foreach ($value as $keys => $values) {
                 $usersTable .= '<td>' . $values . '</td>';
             }
 
-            $usersTable .= '<td>';
-            $usersTable .= '<input type="checkbox" name="userId[]" value="' . $key . '">';
-            $usersTable .= '</td>';
-            $usersTable .= '</tr>';
+            $usersTable .= '<td><input type="checkbox" name="userId[]" value="' . $key . '"></td></tr>';
         }
 
         $this->data['{USERS_TABLE}'] = $usersTable;

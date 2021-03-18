@@ -38,6 +38,5 @@ class Registration extends Model
         file_put_contents(STATIC_DIR . $db, json_encode($arr, JSON_PRETTY_PRINT));
 
         return true;
-        
     }
 }

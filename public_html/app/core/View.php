@@ -54,6 +54,9 @@ class View
      */
     public function render($data = [], $body = '')
     {
+        $data['{TEMPLATE_SRC}'] = TEMPLATES_DIR . TEMPLATE;
+        $data['{TEMPLATE_ADMIN_SRC}'] = TEMPLATES_DIR . TEMPLATE_DIR_ADMIN_PANEL;
+
         $path = '';
         $content = '';
 
@@ -78,7 +81,7 @@ class View
                     $path = str_replace($find, $replace, $path);
                 }
 
-                $path = preg_replace('/{.+[a-zA-Z0-9]}/', '', $path);
+                $path = preg_replace('/{.+}/', '', $path);
 
                 $content .= $path;
             } else {

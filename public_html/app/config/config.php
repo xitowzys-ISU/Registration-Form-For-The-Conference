@@ -5,7 +5,7 @@
  * 
  * @var string
  */
-define('ROOT', 'app/');
+define('ROOT', $_SERVER['DOCUMENT_ROOT'] . '/');
 
 /**
  * Static path to the application
@@ -26,18 +26,18 @@ define('USERS_DATABASE', 'users');
  * 
  * @var string
  */
-define('TEMPLATE', 'default/');
+define('TEMPLATE', 'Default/');
 
 /**
  * Admin Panel Template
  * 
  * @var string
  */
-define('TEMPLATE_DIR_ADMIN_PANEL', 'adminPanel/');
+define('TEMPLATE_DIR_ADMIN_PANEL', 'Admin/');
 
 /**
  * Path to templates
  * 
  * @var string
  */
-define('TEMPLATES_DIR', ROOT . 'views/');
+define('TEMPLATES_DIR', 'templates/');
