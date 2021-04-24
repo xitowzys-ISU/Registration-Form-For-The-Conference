@@ -12,16 +12,27 @@ class Admin extends Model
      *
      * @return array
      */
-    public function getUsers() {
+    public function getUsers()
+    {
 
-        $db = USERS_DATABASE . '.json';
+        $arr = array();
 
-        if(!file_exists(STATIC_DIR . $db)) {
-            return [];
+        $separator = " || ";
+        $db = USERS_DATABASE . '.txt';
+
+        $fp = fopen(STATIC_DIR . $db, 'r');
+
+        while (!feof($fp)) {
+            $data = fgets($fp);
+
+            if (empty($data))
+                break;
+
+            $data = explode($separator, $data);
+
+            if (!($data[0] === "DELETED"))
+                array_push($arr, $data);
         }
-
-        $content = file_get_contents(STATIC_DIR . $db);
-        $arr = json_decode($content, true);
 
         return $arr;
     }
@@ -32,16 +43,42 @@ class Admin extends Model
      * @param array $id
      * @return void
      */
-    public function deleteUser($id) {
-        $db = USERS_DATABASE . '.json';
-
-        $content = file_get_contents(STATIC_DIR . $db);
-        $arr = json_decode($content, true);
+    public function deleteUser($id)
+    {
 
         foreach ($id as $key => $value) {
-            unset($arr[$value]);
-        }
 
-        file_put_contents(STATIC_DIR . $db, json_encode($arr, JSON_PRETTY_PRINT));
+            $separator = " || ";
+            $db = USERS_DATABASE . '.txt';
+
+            $lineNumber = 0;
+            $remoteUser = "";
+
+            $fp = fopen(STATIC_DIR . $db, 'r+');
+
+            while (!feof($fp)) {
+                $data = fgets($fp);
+
+                $arr = explode($separator, $data);
+                if ($arr[0] === $key) {
+                    $remoteUser = "DELETED" . $separator . $data . "";
+                    fclose($fp);
+                    break;
+                }
+
+                $lineNumber++;
+            }
+
+
+            $file = file(STATIC_DIR . $db);
+
+            for ($i = 0; $i < sizeof($file); $i++)
+                if ($i == $lineNumber) unset($file[$i]);
+
+            $fp = fopen(STATIC_DIR . $db, 'w+');
+            fputs($fp, implode("", $file));
+            fwrite($fp, $remoteUser);
+            fclose($fp);
+        }
     }
 }

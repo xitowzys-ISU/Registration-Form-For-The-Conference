@@ -11,32 +11,28 @@ class Registration extends Model
         return '<div class="' . $style . '">' . $nameErr . '</div>';
     }
 
-    /**
-     * Add a user to a json file
-     *
-     * @param array $data
-     * @return bool
-     */
-    public function addUser($data) {
+    // /**
+    //  * Add a user to a json file
+    //  *
+    //  * @param array $data
+    //  * @return bool
+    //  */
+    public function addUser($data)
+    {
+        $separator = " || ";
 
-        $db = USERS_DATABASE . '.json';
+        $db = USERS_DATABASE . '.txt';
 
-        if(!file_exists(STATIC_DIR . $db)) {
-            file_put_contents(STATIC_DIR . $db, json_encode(array($data), JSON_PRETTY_PRINT));
-            return true;
+        $fp = fopen(STATIC_DIR . $db, "a");
+
+        fwrite($fp, date("d-m-Y-H-i-s") . $separator . $_SERVER['REMOTE_ADDR'] . $separator);
+
+        foreach ($data as $key => $value) {
+            if ($value == end($data)) {
+                fwrite($fp, $value . "\n");
+            } else {
+                fwrite($fp, $value . $separator);
+            }
         }
-
-        $content = file_get_contents(STATIC_DIR . $db);
-        $arr = json_decode($content, true);
-
-        if($arr === NULL)
-        {
-            $arr = [];
-        }
-
-        array_push($arr, $data);
-        file_put_contents(STATIC_DIR . $db, json_encode($arr, JSON_PRETTY_PRINT));
-
-        return true;
     }
 }

@@ -4,6 +4,8 @@
             <form action="" method="POST">
                 <table border="1">
                     <tr>
+                        <th>Дата</th>
+                        <th>IP</th>
                         <th>Имя</th>
                         <th>Фамилия</th>
                         <th>Электронная почта</th>
